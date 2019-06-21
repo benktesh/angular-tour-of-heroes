@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Hero } from './hero';
+import { Stock } from './stock';
 import { Observable, of } from 'rxjs';
 import { MessageService } from './message.service';
 import { promise } from 'protractor';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
+
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
@@ -13,38 +14,38 @@ const httpOptions = {
   providedIn: 'root'
 })
 
-export class HeroService {
-  private heroesUrl = 'api/heroes';  // URL to web api
+export class StockService {
+  private stockUrl = 'api/stocks';  // URL to web api
 
-  /** POST: add a new hero to the server */
-  addHero(hero: Hero): Observable<Hero> {
-    return this.http.post<Hero>(this.heroesUrl, hero, httpOptions).pipe(
-      tap((newHero: Hero) => this.log(`added hero w/ id=${newHero.id}`)),
-      catchError(this.handleError<Hero>('addHero'))
+  /** POST: add a new stock to the server */
+  addStock(stock: Stock): Observable<Stock> {
+    return this.http.post<Stock>(this.stockUrl, stock, httpOptions).pipe(
+      tap((newStock: Stock) => this.log(`added stock w/ id=${newStock.id}`)),
+      catchError(this.handleError<Stock>('addStock'))
     );
   }
 
   private log(message: string) {
-    this.messageService.add(`HeroService: ${message}`);
+    this.messageService.add(`StockService: ${message}`);
   }
 
-  /** DELETE: delete the hero from the server */
-  deleteHero(hero: Hero | number): Observable<Hero> {
-    const id = typeof hero === 'number' ? hero : hero.id;
-    const url = `${this.heroesUrl}/${id}`;
+  /** DELETE: delete the stock from the server */
+  deleteStock(stock: Stock | number): Observable<Stock> {
+    const id = typeof stock === 'number' ? stock : stock.id;
+    const url = `${this.stockUrl}/${id}`;
 
-    return this.http.delete<Hero>(url, httpOptions).pipe(
-      tap(_ => this.log(`deleted hero id=${id}`)),
-      catchError(this.handleError<Hero>('deleteHero'))
+    return this.http.delete<Stock>(url, httpOptions).pipe(
+      tap(_ => this.log(`deleted stock id=${id}`)),
+      catchError(this.handleError<Stock>('deleteStock'))
     );
   }
 
-  getHero(id: number): Observable<Hero> {
+  getStock(id: number): Observable<Stock> {
 
-    const url = `${this.heroesUrl}/${id}`;
-    return this.http.get<Hero>(url).pipe(
-      tap(_ => this.log(`fetched hero id=${id}`)),
-      catchError(this.handleError<Hero>(`getHero id=${id}`))
+    const url = `${this.stockUrl}/${id}`;
+    return this.http.get<Stock>(url).pipe(
+      tap(_ => this.log(`fetched stock id=${id}`)),
+      catchError(this.handleError<Stock>(`getStock id=${id}`))
     );
   }
 
@@ -58,16 +59,16 @@ export class HeroService {
     return promise;
   }
   */
-  updateHero(hero: Hero): Observable<any> {
-    return this.http.put(this.heroesUrl, hero, httpOptions).pipe(
-      tap(_ => this.log(`updated hero id=${hero.id}`)),
-      catchError(this.handleError<any>('updateHero'))
+  updateStock(stock: Stock): Observable<any> {
+    return this.http.put(this.stockUrl, stock, httpOptions).pipe(
+      tap(_ => this.log(`updated Stock id=${stock.id}`)),
+      catchError(this.handleError<any>('updateStock'))
     );
   }
 
-  data: Hero[] = [];
+  data: Stock[] = [];
 
-  getHeroes(): Observable<Hero[]> {
+  getStocks(): Observable<Stock[]> {
     /*
     this.data = []; 
     this.messageService.add('HeroService: fetcing heroes');
@@ -87,10 +88,10 @@ export class HeroService {
 
     // return of(HEROES);
 
-    return this.http.get<Hero[]>(this.heroesUrl)
+    return this.http.get<Stock[]>(this.stockUrl)
       .pipe(
-        tap(_ => this.log('fetched heroes')),
-        catchError(this.handleError<Hero[]>('getHeroes', []))
+        tap(_ => this.log('fetched stocks')),
+        catchError(this.handleError<Stock[]>('getStocks', []))
       );
 
 
@@ -116,14 +117,14 @@ export class HeroService {
     };
   }
 
-  searchHeroes(term: string): Observable<Hero[]> {
+  searchStocks(term: string): Observable<Stock[]> {
     if (!term.trim()) {
-      // if not search term, return empty hero array.
+      // if not search term, return empty stock array.
       return of([]);
     }
-    return this.http.get<Hero[]>(`${this.heroesUrl}/?name=${term}`).pipe(
-      tap(_ => this.log(`found heroes matching "${term}"`)),
-      catchError(this.handleError<Hero[]>('searchHeroes', []))
+    return this.http.get<Stock[]>(`${this.stockUrl}/?name=${term}`).pipe(
+      tap(_ => this.log(`found stocks matching "${term}"`)),
+      catchError(this.handleError<Stock[]>('searchStocks', []))
     );
   }
 
